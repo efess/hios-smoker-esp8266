@@ -79,15 +79,28 @@ float ICACHE_FLASH_ATTR convert_to_farenheit(uint16_t adcValue)
 
 float ICACHE_FLASH_ATTR temperature_read(TempState state)
 {
+    int16_t result = 0;
     uint8_t i = 0;
+    uint8_t count = 0;
     uint32_t total = 0;
     
     for(i = 0; i < TEMPERATURE_READ_TRIES; i++)
     {
-        total += ads115_read_analog(state.adc_input);
+        
+        result = ads1115_read_analog(state.adc_input);
+        if(result < 0) 
+        {
+            INFO("Bad ADS1115 read %d\r\n", result);
+        }
+        else
+        {
+            INFO("ADS1115 read %d\r\n", result);
+            total += result;
+            count++;
+        }
     }
         
-    uint16_t avg = (uint16_t)total / TEMPERATURE_READ_TRIES;
+    uint16_t avg = total / count;
     
     return convert_to_farenheit(avg);
 }

@@ -20,7 +20,7 @@
 
 // temperature needs to be 
 // negative means grill temp is above target
-#define FAN_LEVEL_ZERO_TEMP_TARGET_DIFFERENCE -5
+#define FAN_LEVEL_ZERO_TEMP_TARGET_DIFFERENCE -3
 #define FAN_LEVEL_ONE_TEMP_TARGET_DIFFERENCE 2
 #define FAN_LEVEL_TWO_TEMP_TARGET_DIFFERENCE 5
 #define FAN_LEVEL_THREE_TEMP_TARGET_DIFFERENCE 10

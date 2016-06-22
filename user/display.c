@@ -1,5 +1,7 @@
 #include "display.h"
 #include "driver/i2c_hd44780.h"
+#include "user_interface.h"
+#include "user_config.h"
 
 void ICACHE_FLASH_ATTR display_show_loading()
 {
@@ -22,13 +24,13 @@ void ICACHE_FLASH_ATTR display_show_normal_state(State* state)
 //    LCD_setCursor(0, 0); 
 //    LCD_print(DISPLAY_CLEAR_ROW);
     LCD_setCursor(0, 0);
-    os_sprintf(line, "Grill: %s%sF T:%3d", grill_temp_str, degrees, state->grill.upper_threshold);
+    os_sprintf(line, "Grill:%6s%sF T:%3d", grill_temp_str, degrees, state->grill.upper_threshold);
     LCD_print(line);
     
 //    LCD_setCursor(0, 1); 
 //    LCD_print(DISPLAY_CLEAR_ROW);
     LCD_setCursor(0, 1);
-    os_sprintf(line, "Meat: %s%sF T:%3d", meat_temp_str, degrees, state->meat.upper_threshold);
+    os_sprintf(line, "Meat:%7s%sF T:%3d", meat_temp_str, degrees, state->meat.upper_threshold);
     LCD_print(line);
     
 //    LCD_print(grill_temp_str);
@@ -49,7 +51,11 @@ void ICACHE_FLASH_ATTR display_show_normal_state(State* state)
 
     LCD_setCursor(0, 2); 
     LCD_print("Fan speed: ");
-    os_sprintf(line, "%1d", state->fanState);
+    os_sprintf(line, "%1d", state->fanState.level);
+    LCD_print(line);
+    
+    LCD_setCursor(0, 3); 
+    os_sprintf(line, "%s%11d", STA_SSID, system_get_time());
     LCD_print(line);
 }
 

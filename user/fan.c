@@ -2,6 +2,7 @@
 #include "user_interface.h"
 #include "gpio_helper.h"
 #include "pwm.h"
+#include "debug.h"
 
 uint32 calc_duty(uint8_t percentage)
 {
@@ -19,7 +20,9 @@ void ICACHE_FLASH_ATTR fan_init()
     uint32 pinCfg [][3] = {
        {PWM_0_OUT_IO_MUX,PWM_0_OUT_IO_FUNC,PWM_0_OUT_IO_NUM}  
     };
-    uint32 duty_init[] = {calc_duty(50)};
+    
+    // start OFF
+    uint32 duty_init[] = {calc_duty(0)};
     
     pwm_init(
         PWM_PERIOD,
@@ -37,26 +40,26 @@ void ICACHE_FLASH_ATTR fan_modify_fan_state(State* state)
     uint8_t seconds_off_time = 0;
     uint8_t state_changed = 0;
     
-    if(temp_difference > FAN_LEVEL_ZERO_TEMP_TARGET_DIFFERENCE)
+    if(temp_difference < FAN_LEVEL_ZERO_TEMP_TARGET_DIFFERENCE)
     {
         state->fanState.level = 0;
     }
-    else if(temp_difference > FAN_LEVEL_ONE_TEMP_TARGET_DIFFERENCE)
+    else if(temp_difference < FAN_LEVEL_ONE_TEMP_TARGET_DIFFERENCE)
     {
         state->fanState.level = 1;
         seconds_off_time = FAN_LEVEL_ONE_INTERVAL_SECONDS;
     }
-    else if(temp_difference > FAN_LEVEL_TWO_TEMP_TARGET_DIFFERENCE)
+    else if(temp_difference < FAN_LEVEL_TWO_TEMP_TARGET_DIFFERENCE)
     {
         state->fanState.level = 2;
         seconds_off_time = FAN_LEVEL_TWO_INTERVAL_SECONDS;
     }
-    else if(temp_difference > FAN_LEVEL_THREE_TEMP_TARGET_DIFFERENCE)
+    else if(temp_difference < FAN_LEVEL_THREE_TEMP_TARGET_DIFFERENCE)
     {
         state->fanState.level = 3;
         seconds_off_time = FAN_LEVEL_THREE_INTERVAL_SECONDS;
     }
-    else if(temp_difference > FAN_LEVEL_THREE_TEMP_TARGET_DIFFERENCE)
+    else if(temp_difference < FAN_LEVEL_THREE_TEMP_TARGET_DIFFERENCE)
     {
         state->fanState.level = 4;
         seconds_off_time = FAN_LEVEL_FOUR_INTERVAL_SECONDS;
@@ -86,13 +89,15 @@ void ICACHE_FLASH_ATTR fan_modify_fan_state(State* state)
     {
         if(state->fanState.is_on) 
         {
-            pwm_set_duty(calcDuty(50));
+            pwm_set_duty(calc_duty(50), 0);
             pwm_start();
+            INFO("Turning fan ON\r\n");
         } 
         else 
         {
-            pwm_set_duty(calcDuty(0));
+            pwm_set_duty(calc_duty(0), 0);
             pwm_start();
+            INFO("Turning fan OFF\r\n");
         }
     }
 }

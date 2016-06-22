@@ -20,11 +20,13 @@ void ICACHE_FLASH_ATTR state_handle_outgoing_updates()
     current_state->grill.current_value = temperature_read(current_state->grill);
     current_state->meat.current_value = temperature_read(current_state->meat);
     
+    
     char value[16] = "";
     printFloat(current_state->grill.current_value, value);
     
     INFO("ADC: %s\r\n", value);
     
+    fan_modify_fan_state(current_state);
     message_send_state(current_state);
     display_show_normal_state(current_state);
     
@@ -48,7 +50,10 @@ void ICACHE_FLASH_ATTR state_init()
     current_state->needsConfigSend = true; // send data to controller
     
     current_state->grill.adc_input = ADS1115_INPUT_0;
+    current_state->grill.upper_threshold = 78;
+    
     current_state->meat.adc_input = ADS1115_INPUT_1;
+    current_state->meat.upper_threshold = 230;
 
     os_timer_disarm(&outgoing_updates_timer);
     os_timer_setfn(&outgoing_updates_timer, (os_timer_func_t *)state_handle_outgoing_updates);

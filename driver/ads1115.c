@@ -1,5 +1,6 @@
 #include "driver/ads1115.h"
 #include "driver/i2c.h"
+#include "debug.h"
 
 uint16 _config;
 
@@ -10,7 +11,8 @@ uint8_t get_config_input()
 
 void set_config_input(uint8_t ain)
 {
-    _config = _config | ((ain & 0x07) << ADS1115_CONFIG_MPLEX);
+    _config &= ~(0x07 << ADS1115_CONFIG_MPLEX);
+    _config |= ((ain & 0x07) << ADS1115_CONFIG_MPLEX);
 }
 
 int8_t send_ptr_set(uint8_t register_ptr)
@@ -82,6 +84,7 @@ int8_t send_config()
 int8_t set_analog_input(uint8_t ain)
 {
     set_config_input(ain);
+    INFO("config set: %d\r\n", _config);
     return send_config();
 }
 
@@ -93,7 +96,7 @@ int8_t ads1115_init(void)
     _config = _config | (ADS1115_INPUT_0 << ADS1115_CONFIG_MPLEX);
     _config = _config | (0x02 << 9); // PGA: 4.096
     _config = _config | (0x00 << 8); // Continuous mode
-    _config = _config | (0x04 << 5); // 128SPS
+    _config = _config | (0x07 << 5); // 0x04 is 128SPS, 0x07 is 860SPS
     _config = _config | (0x00 << 4); 
     
     _config = _config | 0x03; // disable comparator
@@ -102,7 +105,7 @@ int8_t ads1115_init(void)
 }
 
 
-int16_t ads115_read_analog(uint8_t ain)
+int16_t ads1115_read_analog(uint8_t ain)
 {
     if(get_config_input() != ain) 
     {
@@ -116,6 +119,8 @@ int16_t ads115_read_analog(uint8_t ain)
     {
         return -32;
     }
+        
+    os_delay_us(ADS1115_READ_DELAY); // wait min 1ms
     
     uint8_t address = (ADS1115_ADDRESS << 1) | ADS1115_READ_BIT;
     
@@ -134,6 +139,7 @@ int16_t ads115_read_analog(uint8_t ain)
     uint8_t lsb = i2c_readByte();
     i2c_send_ack(1);
     i2c_stop();
+    
     
     return (msb << 8) | lsb;
 }

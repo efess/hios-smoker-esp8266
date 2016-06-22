@@ -4,7 +4,7 @@
 #include "os_type.h"
 
 #define TEMPERATURE_RANGE_SIZE (32)
-#define TEMPERATURE_READ_TRIES (32)
+#define TEMPERATURE_READ_TRIES (10)
 
 typedef struct {
     uint8_t adc_input;
