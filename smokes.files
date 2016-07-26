@@ -160,3 +160,4 @@ user/display.c
 include/display.h
 user/fan.c
 include/fan.h
+include/therm_setup.h

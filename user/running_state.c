@@ -17,9 +17,17 @@ ETSTimer outgoing_updates_timer;
 
 void ICACHE_FLASH_ATTR state_handle_outgoing_updates()
 {
-    current_state->grill.current_value = temperature_read(current_state->grill);
-    current_state->meat.current_value = temperature_read(current_state->meat);
+    uint8_t i;
     
+    current_state->grill.current_value = temperature_read(current_state->grill);
+    current_state->meats[0].current_value = temperature_read(current_state->meats[0]);
+    
+//    for( i = 0; i < TEMPERATURE_MEAT_COUNT; i++)
+//    {
+//        if(current_state->meat.enabled){
+//            current_state->meats[i].current_value = temperature_read(current_state->meats[i]);
+//        }
+//    }
     
     char value[16] = "";
     printFloat(current_state->grill.current_value, value);
@@ -50,10 +58,14 @@ void ICACHE_FLASH_ATTR state_init()
     current_state->needsConfigSend = true; // send data to controller
     
     current_state->grill.adc_input = ADS1115_INPUT_0;
-    current_state->grill.upper_threshold = 78;
+    strncpy(current_state->grill.name, "Grill", 5);
+    current_state->grill.target = 300;
     
-    current_state->meat.adc_input = ADS1115_INPUT_1;
-    current_state->meat.upper_threshold = 230;
+    current_state->meats[0].adc_input = ADS1115_INPUT_1;
+    current_state->meats[0].target = 190;
+    
+//    current_state->meat[0].adc_input = ADS1115_INPUT_1;
+//    current_state->meat[0].upper_threshold = 203;
 
     os_timer_disarm(&outgoing_updates_timer);
     os_timer_setfn(&outgoing_updates_timer, (os_timer_func_t *)state_handle_outgoing_updates);

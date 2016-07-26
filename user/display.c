@@ -16,21 +16,21 @@ void ICACHE_FLASH_ATTR display_show_normal_state(State* state)
     char degrees[2] = {(char)223, 0};
     char meat_temp_str[16] = "";
     char grill_temp_str[16] = "";
-    char line[20] = "";
+    char line[21] = "";
     
     printFloat(state->grill.current_value, grill_temp_str);
-    printFloat(state->meat.current_value, meat_temp_str);
+    printFloat(state->meats[0].current_value, meat_temp_str);
 
 //    LCD_setCursor(0, 0); 
 //    LCD_print(DISPLAY_CLEAR_ROW);
     LCD_setCursor(0, 0);
-    os_sprintf(line, "Grill:%6s%sF T:%3d", grill_temp_str, degrees, state->grill.upper_threshold);
+    os_sprintf(line, "Grill:%6s%sF T:%3d", grill_temp_str, degrees, state->grill.target);
     LCD_print(line);
     
 //    LCD_setCursor(0, 1); 
 //    LCD_print(DISPLAY_CLEAR_ROW);
     LCD_setCursor(0, 1);
-    os_sprintf(line, "Meat:%7s%sF T:%3d", meat_temp_str, degrees, state->meat.upper_threshold);
+    os_sprintf(line, "Meat:%7s%sF T:%3d", meat_temp_str, degrees, state->meats[0].target);
     LCD_print(line);
     
 //    LCD_print(grill_temp_str);
@@ -40,7 +40,7 @@ void ICACHE_FLASH_ATTR display_show_normal_state(State* state)
 //    LCD_print(temp_buffer);
 
 //    LCD_setCursor(0, 1); 
-//    LCD_print(DISPLAY_CLEAR_ROW);
+//    LCD_print(    DISPLAY_CLEAR_ROW);
 //    LCD_setCursor(0, 1);
 //    LCD_print("Meat: ");
 //    LCD_print(meat_temp_str);

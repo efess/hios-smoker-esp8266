@@ -35,9 +35,7 @@
 #include "config.h"
 #include "debug.h"
 #include "gpio.h"
-#include "user_interface.h"
-#include "provision.h"
-#include "sensors.h"
+#include "user_interface.h" 
 #include "running_state.h"
 #include "driver/i2c_hd44780.h"
 #include "driver/ads1115.h"
@@ -46,7 +44,8 @@
 //#include "../gdbstub/gdbstub.h"
 
 #include "mem.h"
-#define TOPIC_SUB_OPTIONS_UPDATE "/home/outside/smoker/stoker/update"
+#define TOPIC_SUB_OPTIONS_CONFIG_UPDATE "/home/outside/smoker/stoker/config/update"
+
 #define TOPIC_SUB_OPTIONS_REQUEST "/home/outside/smoker/stoker/request"
 
 #define TOPIC_PUB_OPTIONS_RESPONSE "/home/outside/smoker/stoker/response"
@@ -67,8 +66,6 @@ void mqttConnectedCb(uint32_t *args)
 	MQTT_Client* client = (MQTT_Client*)args;
 	INFO("MQTT: Connected\r\n");
     MQTT_Subscribe(client, TOPIC_SUB_OPTIONS_REQUEST, 0);
-    MQTT_Subscribe(client, TOPIC_SUB_OPTIONS_UPDATE, 0);
-
 }
 
 void mqttDisconnectedCb(uint32_t *args)
@@ -105,11 +102,12 @@ void mqttDataCb(uint32_t *args, const char* topic, uint32_t topic_len, const cha
 
     INFO("Received %s\r\n", dataBuf);
     INFO("topic %s\r\n", topicBuf);
-    if(strcmp(TOPIC_SUB_OPTIONS_UPDATE, topicBuf) == 0)
-    {
-        handle_mqtt_config_update(dataBuf);
-    }
-    else if(strcmp(TOPIC_SUB_OPTIONS_REQUEST, topicBuf) == 0)
+//    if(strcmp(TOPIC_SUB_OPTIONS_UPDATE, topicBuf) == 0)
+//    {
+//        handle_mqtt_config_update(dataBuf);
+//    }
+//    else 
+    if(strcmp(TOPIC_SUB_OPTIONS_REQUEST, topicBuf) == 0)
     {
         char* response;
 

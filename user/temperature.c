@@ -84,6 +84,8 @@ float ICACHE_FLASH_ATTR temperature_read(TempState state)
     uint8_t count = 0;
     uint32_t total = 0;
     
+    INFO("try do it........ %d %d\r\n", state.adc_input, state.target);
+    
     for(i = 0; i < TEMPERATURE_READ_TRIES; i++)
     {
         
@@ -98,6 +100,10 @@ float ICACHE_FLASH_ATTR temperature_read(TempState state)
             total += result;
             count++;
         }
+    }
+    
+    if(count == 0) {
+        return 0;
     }
         
     uint16_t avg = total / count;

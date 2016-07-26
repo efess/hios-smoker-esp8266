@@ -10,7 +10,7 @@
 #define FAN_IS_ON 1
 #define FAN_IS_OFF 0
 
-#define FAN_INTERVAL_ON_SECONDS 10
+#define FAN_INTERVAL_ON_SECONDS 7
 
 // fan levels are from 0 to 4, 0 is completely off, four the fan is on the most
 #define FAN_LEVEL_ONE_INTERVAL_SECONDS 60
@@ -20,8 +20,8 @@
 
 // temperature needs to be 
 // negative means grill temp is above target
-#define FAN_LEVEL_ZERO_TEMP_TARGET_DIFFERENCE -3
-#define FAN_LEVEL_ONE_TEMP_TARGET_DIFFERENCE 2
+#define FAN_LEVEL_ZERO_TEMP_TARGET_DIFFERENCE -1
+#define FAN_LEVEL_ONE_TEMP_TARGET_DIFFERENCE 3
 #define FAN_LEVEL_TWO_TEMP_TARGET_DIFFERENCE 5
 #define FAN_LEVEL_THREE_TEMP_TARGET_DIFFERENCE 10
 #define FAN_LEVEL_FOUR_TEMP_TARGET_DIFFERENCE 20

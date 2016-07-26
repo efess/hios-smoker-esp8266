@@ -15,6 +15,9 @@
 #define ADS1115_INPUT_0 0x04
 #define ADS1115_INPUT_1 0x05
 
+#define ADS1115_INPUT_2 0x06
+#define ADS1115_INPUT_3 0x07
+
 #define ADS1115_READ_DELAY 3000 // 3 ms between reads
 
 int8_t ICACHE_FLASH_ATTR ads1115_init(void);

@@ -34,9 +34,12 @@ void ICACHE_FLASH_ATTR fan_init()
 
 void ICACHE_FLASH_ATTR fan_modify_fan_state(State* state)
 {
+    
     uint32_t seconds_since_boot = system_get_time() / 1000000;
     uint32_t seconds_since_change = seconds_since_boot - state->fanState.timestamp_last_state_change;
-    uint16_t temp_difference = state->grill.upper_threshold - state->grill.current_value;
+    int16_t temp_difference = state->grill.target - state->grill.current_value;
+    
+    
     uint8_t seconds_off_time = 0;
     uint8_t state_changed = 0;
     
@@ -44,27 +47,29 @@ void ICACHE_FLASH_ATTR fan_modify_fan_state(State* state)
     {
         state->fanState.level = 0;
     }
-    else if(temp_difference < FAN_LEVEL_ONE_TEMP_TARGET_DIFFERENCE)
+    else if(temp_difference <= FAN_LEVEL_ONE_TEMP_TARGET_DIFFERENCE)
     {
         state->fanState.level = 1;
         seconds_off_time = FAN_LEVEL_ONE_INTERVAL_SECONDS;
     }
-    else if(temp_difference < FAN_LEVEL_TWO_TEMP_TARGET_DIFFERENCE)
+    else if(temp_difference <= FAN_LEVEL_TWO_TEMP_TARGET_DIFFERENCE)
     {
         state->fanState.level = 2;
         seconds_off_time = FAN_LEVEL_TWO_INTERVAL_SECONDS;
     }
-    else if(temp_difference < FAN_LEVEL_THREE_TEMP_TARGET_DIFFERENCE)
+    else if(temp_difference <= FAN_LEVEL_THREE_TEMP_TARGET_DIFFERENCE)
     {
         state->fanState.level = 3;
         seconds_off_time = FAN_LEVEL_THREE_INTERVAL_SECONDS;
     }
-    else if(temp_difference < FAN_LEVEL_THREE_TEMP_TARGET_DIFFERENCE)
+    else
     {
         state->fanState.level = 4;
         seconds_off_time = FAN_LEVEL_FOUR_INTERVAL_SECONDS;
     }
-
+    
+    INFO("TIMESTAMP: %d\r\n ", seconds_since_boot);
+    INFO("STATECHANGE: %d\r\n ", seconds_since_change);
     if(state->fanState.is_on) 
     {
         if(seconds_since_change > FAN_INTERVAL_ON_SECONDS)

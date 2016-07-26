@@ -68,15 +68,8 @@ typedef struct{
 
 	uint8_t mqtt_host[64];
     uint32_t mqtt_port;
-
-    // LIGHT setup
     uint8_t device_config[DEVICE_CONFIG_MAX];
     uint16_t device_config_length;
-
-//    uint32_t light_color;
-//    uint32_t light_options;
-//    uint8_t light_pallete_size;
-//    uint32_t light_pallete[16];
 
 } SYSCFG;
 
