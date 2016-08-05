@@ -1,6 +1,7 @@
 #ifndef FAN
 #define FAN
 
+#include "config.h"
 #include "state.h"
 
 #define PWM_PERIOD 1000
@@ -30,7 +31,7 @@
 #define PWM_0_OUT_IO_NUM 12
 #define PWM_0_OUT_IO_FUNC  FUNC_GPIO12
 
-void ICACHE_FLASH_ATTR fan_modify_fan_state(State* state);
+void ICACHE_FLASH_ATTR fan_modify_fan_state(State* state, AppCfg* cfg);
 
 #endif // FAN
 

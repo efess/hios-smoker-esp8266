@@ -30,35 +30,28 @@
 
 #ifndef USER_CONFIG_H_
 #define USER_CONFIG_H_
+
 #include "os_type.h"
 #include "user_config.h"
 
-#define DEVICE_TYPE	"undercabinet"
-
-//(1) isoccupied
-//(4) occupied brightness
-//(3) occupied program
-//(2) occupied transition
-//(4) unoccupied brightness
-//(3) unoccupied program
-//(2) unoccupied transition
-//(1) isroombright
-
-#define OPTIONS_SHIFT_ROOM_ISOCCUPIED 0
-#define OPTIONS_SHIFT_ROOM_ISBRIGHT 19
-
-#define OPTIONS_BITMASK_OCCUPIED_PROGRAM 0x0007
-#define OPTIONS_BITMASK_OCCUPIED_TRANSITION 0x0024
-
-#define OPTIONS_BITMASK_UNOCCUPIED_PROGRAM 0x0700
-#define OPTIONS_BITMASK_LIGHT_PROGRAM 0x2400
-#define OPTIONS_BITMASK_UNCOND_ON 0x08
-#define OPTIONS_BITMASK_MOTION_ON 0x16
-#define OPTIONS_BITMASK_LIGHT_SENSE_ON 0x32
+#define DEVICE_TYPE	"smokes"
 
 #define DEVICE_CONFIG_MAX 318
 
-typedef struct{
+typedef struct {
+    char name[16];
+    uint16_t target;
+    uint8_t probId;
+    uint8_t enabled;
+} ProbeCfg;
+
+typedef struct {
+    ProbeCfg probes[3];
+    uint16_t grillTarget;
+    uint8_t fanPulseSeconds;
+} AppCfg;
+
+typedef struct {
 	uint32_t cfg_holder;
 	uint8_t device_id[16];
 
@@ -70,7 +63,6 @@ typedef struct{
     uint32_t mqtt_port;
     uint8_t device_config[DEVICE_CONFIG_MAX];
     uint16_t device_config_length;
-
 } SYSCFG;
 
 typedef struct {

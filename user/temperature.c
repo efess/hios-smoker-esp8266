@@ -77,14 +77,12 @@ float ICACHE_FLASH_ATTR convert_to_farenheit(uint16_t adcValue)
 }
 
 
-float ICACHE_FLASH_ATTR temperature_read(TempState state)
+float ICACHE_FLASH_ATTR temperature_read(ProbeState state)
 {
     int16_t result = 0;
     uint8_t i = 0;
     uint8_t count = 0;
     uint32_t total = 0;
-    
-    INFO("try do it........ %d %d\r\n", state.adc_input, state.target);
     
     for(i = 0; i < TEMPERATURE_READ_TRIES; i++)
     {

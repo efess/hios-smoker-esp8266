@@ -32,12 +32,12 @@ void ICACHE_FLASH_ATTR fan_init()
     pwm_start();
 }
 
-void ICACHE_FLASH_ATTR fan_modify_fan_state(State* state)
+void ICACHE_FLASH_ATTR fan_modify_fan_state(State* state, AppCfg* cfg)
 {
     
     uint32_t seconds_since_boot = system_get_time() / 1000000;
     uint32_t seconds_since_change = seconds_since_boot - state->fanState.timestamp_last_state_change;
-    int16_t temp_difference = state->grill.target - state->grill.current_value;
+    int16_t temp_difference = cfg->grillTarget - state->probes[STATE_PROBEID_GRILL].current_value;
     
     
     uint8_t seconds_off_time = 0;

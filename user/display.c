@@ -11,26 +11,29 @@ void ICACHE_FLASH_ATTR display_show_loading()
     LCD_print("   Starting...  ");
 }
 
-void ICACHE_FLASH_ATTR display_show_normal_state(State* state)
+void ICACHE_FLASH_ATTR display_show_normal_state(State* state, AppCfg* cfg)
 {
     char degrees[2] = {(char)223, 0};
     char meat_temp_str[16] = "";
     char grill_temp_str[16] = "";
     char line[21] = "";
     
-    printFloat(state->grill.current_value, grill_temp_str);
-    printFloat(state->meats[0].current_value, meat_temp_str);
+    ProbeState* meatState = &state->probes[STATE_PROBEID_FIRST_MEAT + state->lcdState.probe_id_shown];
+    ProbeCfg* meatCfg = &cfg->probes[state->lcdState.probe_id_shown];
+    
+    printFloat(state->probes[STATE_PROBEID_GRILL].current_value, grill_temp_str);
+    printFloat(meatState->current_value, meat_temp_str);
 
 //    LCD_setCursor(0, 0); 
 //    LCD_print(DISPLAY_CLEAR_ROW);
     LCD_setCursor(0, 0);
-    os_sprintf(line, "Grill:%6s%sF T:%3d", grill_temp_str, degrees, state->grill.target);
+    os_sprintf(line, "Grill:%6s%sF T:%3d", grill_temp_str, degrees, cfg->grillTarget);
     LCD_print(line);
     
 //    LCD_setCursor(0, 1); 
 //    LCD_print(DISPLAY_CLEAR_ROW);
     LCD_setCursor(0, 1);
-    os_sprintf(line, "Meat:%7s%sF T:%3d", meat_temp_str, degrees, state->meats[0].target);
+    os_sprintf(line, "Meat:%7s%sF T:%3d", meat_temp_str, degrees, meatCfg->target);
     LCD_print(line);
     
 //    LCD_print(grill_temp_str);

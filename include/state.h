@@ -2,10 +2,14 @@
 #define STATE_H
 
 #include "c_types.h"
-#include "temperature.h"
+
+#define STATE_PROBE_COUNT 4
+#define STATE_PROBE_MEAT_COUNT 3
+#define STATE_PROBEID_GRILL 0
+#define STATE_PROBEID_FIRST_MEAT 1
 
 typedef struct {
-    uint8_t meat_index;
+    uint8_t probe_id_shown;
     uint32_t timestamp_last_state_change;
 } LcdState;
 
@@ -16,13 +20,14 @@ typedef struct {
 } FanState;
 
 typedef struct {
-    uint32_t update_after_this_time;
-    bool needsConfigSend;
-  
+    uint8_t adc_input;
+    float current_value;
+} ProbeState;
+
+typedef struct {
     FanState fanState;
     
-    TempState grill;
-    TempState meats[TEMPERATURE_MEAT_COUNT];
+    ProbeState probes[STATE_PROBE_COUNT];
     
     LcdState lcdState;
 } State;
