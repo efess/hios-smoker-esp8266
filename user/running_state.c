@@ -17,9 +17,29 @@ AppCfg* appCfg;
 State* current_state;
 ETSTimer outgoing_updates_timer;
 
+void ICACHE_FLASH_ATTR test_app_cfg(){
+    
+    INFO("- %s\r\n", appCfg->probes[0].name);
+    INFO("- %d\r\n", appCfg->probes[0].target);
+    INFO("- %d\r\n", appCfg->probes[0].probId);
+    INFO("- %d\r\n", appCfg->probes[0].enabled);
+    INFO("----------------\r\n");
+    INFO("- %s\r\n", appCfg->probes[1].name);
+    INFO("- %d\r\n", appCfg->probes[1].target);
+    INFO("- %d\r\n", appCfg->probes[1].probId);
+    INFO("- %d\r\n", appCfg->probes[1].enabled);
+    INFO("----------------\r\n");
+    INFO("- %s\r\n", appCfg->probes[2].name);
+    INFO("- %d\r\n", appCfg->probes[2].target);
+    INFO("- %d\r\n", appCfg->probes[2].probId);
+    INFO("- %d\r\n", appCfg->probes[2].enabled);
+    INFO("----------------\r\n");
+    INFO("- %d\r\n", appCfg->grillTarget);
+    INFO("- %d\r\n", appCfg->fanPulseSeconds);
+}
+
 void ICACHE_FLASH_ATTR set_app_cfg(){
-    if(!sysCfg.device_config_length || 
-            sysCfg.device_config_length != sizeof(AppCfg)) {
+    if(!sysCfg.device_config_length) {
         INFO("set app cfg - defaults - config length is %d\r\n", sysCfg.device_config_length);
         sysCfg.device_config_length = sizeof(AppCfg);
         
@@ -30,6 +50,7 @@ void ICACHE_FLASH_ATTR set_app_cfg(){
     } else {
         INFO("set app cfg\r\n");
         appCfg = (AppCfg*)sysCfg.device_config;
+        test_app_cfg();
     }
 }
 
@@ -59,27 +80,6 @@ void ICACHE_FLASH_ATTR state_init()
     os_timer_disarm(&outgoing_updates_timer);
     os_timer_setfn(&outgoing_updates_timer, (os_timer_func_t *)state_handle_outgoing_updates);
     os_timer_arm(&outgoing_updates_timer, 5000, 1);
-}
-
-void ICACHE_FLASH_ATTR test_app_cfg(){
-    
-    INFO("- %s\r\n", appCfg->probes[0].name);
-    INFO("- %d\r\n", appCfg->probes[0].target);
-    INFO("- %d\r\n", appCfg->probes[0].probId);
-    INFO("- %d\r\n", appCfg->probes[0].enabled);
-    INFO("----------------\r\n");
-    INFO("- %s\r\n", appCfg->probes[1].name);
-    INFO("- %d\r\n", appCfg->probes[1].target);
-    INFO("- %d\r\n", appCfg->probes[1].probId);
-    INFO("- %d\r\n", appCfg->probes[1].enabled);
-    INFO("----------------\r\n");
-    INFO("- %s\r\n", appCfg->probes[2].name);
-    INFO("- %d\r\n", appCfg->probes[2].target);
-    INFO("- %d\r\n", appCfg->probes[2].probId);
-    INFO("- %d\r\n", appCfg->probes[2].enabled);
-    INFO("----------------\r\n");
-    INFO("- %d\r\n", appCfg->grillTarget);
-    INFO("- %d\r\n", appCfg->fanPulseSeconds);
 }
 
 void ICACHE_FLASH_ATTR handle_mqtt_config_update(char* base64Update)

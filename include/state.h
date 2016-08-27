@@ -10,7 +10,9 @@
 
 typedef struct {
     uint8_t probe_id_shown;
-    uint32_t timestamp_last_state_change;
+    uint32_t timestamp_probe_state_change;
+    uint32_t timestamp_marquee_state_change;
+    uint8_t meat_marquee_position;
 } LcdState;
 
 typedef struct {
