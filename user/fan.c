@@ -68,8 +68,9 @@ void ICACHE_FLASH_ATTR fan_modify_fan_state(State* state, AppCfg* cfg)
         seconds_off_time = FAN_LEVEL_FOUR_INTERVAL_SECONDS;
     }
     
-    INFO("TIMESTAMP: %d\r\n ", seconds_since_boot);
+    //INFO("TIMESTAMP: %d\r\n ", seconds_since_boot);
     INFO("STATECHANGE: %d\r\n ", seconds_since_change);
+    INFO("TEMPDIFF: %d\r\n ", temp_difference);
     if(state->fanState.is_on) 
     {
         if(seconds_since_change > FAN_INTERVAL_ON_SECONDS)
